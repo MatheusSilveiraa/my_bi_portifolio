@@ -1,0 +1,108 @@
+table All_Data
+	lineageTag: 63d320d1-3bb6-430a-b39c-269bd3748aa8
+
+	column 'Nome da Origem'
+		dataType: string
+		lineageTag: 176d7ed5-94e8-486d-b5bc-88e3dd790025
+		summarizeBy: none
+		sourceColumn: Nome da Origem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Archive_Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 3fd39eca-d368-4342-874a-88de2d4a3d16
+		summarizeBy: none
+		sourceColumn: Archive_Date
+
+		variation Variation
+			isDefault
+			relationship: 8f97fcb6-25a1-4c32-8574-296ab107aa69
+			defaultHierarchy: LocalDateTable_d0b27af8-1acc-41b9-b9e4-db814896eac7.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Specialty_HIPE
+		dataType: int64
+		formatString: 0
+		lineageTag: eba6659c-0671-4166-b943-23d1ee268cfe
+		summarizeBy: sum
+		sourceColumn: Specialty_HIPE
+
+		annotation SummarizationSetBy = Automatic
+
+	column Specialty_Name
+		dataType: string
+		lineageTag: 11883f29-d363-43e7-bd0e-e9364b212386
+		summarizeBy: none
+		sourceColumn: Specialty_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Case_Type
+		dataType: string
+		lineageTag: e37af28f-ea8c-414c-94ae-48bc0b5dfd38
+		summarizeBy: none
+		sourceColumn: Case_Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Adult_Child
+		dataType: string
+		lineageTag: 622b92ae-51e6-46df-b2f2-75d60cf66a5d
+		summarizeBy: none
+		sourceColumn: Adult_Child
+
+		annotation SummarizationSetBy = Automatic
+
+	column Age_Profile
+		dataType: string
+		lineageTag: 48d4300e-7ff6-49e9-a043-bf2fecbd83a0
+		summarizeBy: none
+		sourceColumn: Age_Profile
+
+		annotation SummarizationSetBy = Automatic
+
+	column Time_Bands
+		dataType: string
+		lineageTag: 79e5b90e-a83a-4b2f-9a6b-d54af6d6fa47
+		summarizeBy: none
+		sourceColumn: Time_Bands
+
+		annotation SummarizationSetBy = Automatic
+
+	column Total
+		dataType: int64
+		formatString: 0
+		lineageTag: 224ed1b7-3805-4eea-8bd1-9e37f13d7665
+		summarizeBy: sum
+		sourceColumn: Total
+
+		annotation SummarizationSetBy = Automatic
+
+	column Speciality_Name
+		dataType: string
+		lineageTag: cf2a3256-fccf-426e-bba2-e597b489ca5a
+		summarizeBy: none
+		sourceColumn: Speciality_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition All_Data = m
+		mode: import
+		source =
+				let
+				    Fonte = Table.Combine({Inpatient, Outpatient}),
+				    #"Valor Substituído" = Table.ReplaceValue(Fonte,"18 Months +","18+ Months",Replacer.ReplaceText,{"Time_Bands"}),
+				    #"Texto Aparado" = Table.TransformColumns(#"Valor Substituído",{{"Time_Bands", Text.Trim, type text}}),
+				    #"Valor Substituído1" = Table.ReplaceValue(#"Texto Aparado","","No Inputs",Replacer.ReplaceValue,{"Age_Profile", "Time_Bands"})
+				in
+				    #"Valor Substituído1"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

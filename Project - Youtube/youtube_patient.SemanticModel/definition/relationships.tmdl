@@ -1,0 +1,19 @@
+relationship 1718b152-68e9-4523-81c8-7cf7094e0286
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Inpatient.Archive_Date
+	toColumn: LocalDateTable_d6c51a2e-1f7b-44e9-affc-1c2267798cd9.Date
+
+relationship 7e30fe23-6e67-4108-aa6d-f4344c4e7a7f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Outpatient.Archive_Date
+	toColumn: LocalDateTable_204910bf-5d1e-4ff9-8a5d-9ff6857b0993.Date
+
+relationship 8f97fcb6-25a1-4c32-8574-296ab107aa69
+	joinOnDateBehavior: datePartOnly
+	fromColumn: All_Data.Archive_Date
+	toColumn: LocalDateTable_d0b27af8-1acc-41b9-b9e4-db814896eac7.Date
+
+relationship AutoDetected_e6cd809b-04a1-4766-ada0-aad141877e2f
+	fromColumn: All_Data.Specialty_Name
+	toColumn: Mapping_Specialty.Specialty
+

@@ -1,0 +1,26 @@
+table Medidas
+	lineageTag: a4eab096-00a9-4450-9604-6654f073d222
+
+	measure 'Latest Month Wait List' = CALCULATE(SUM(All_Data[Total]),All_Data[Archive_Date]=MAX(All_Data[Archive_Date]))
+		formatString: 0
+		lineageTag: 3b6fc8ec-6b9e-4e24-8376-5080101c4c35
+
+	measure 'PY Latest Month Wait List' = CALCULATE(SUM(All_Data[Total]), All_Data[Archive_Date] = EDATE(MAX(All_Data[Archive_Date]), -12))
+		formatString: 0
+		lineageTag: 69b12032-0ec3-4c08-aabc-eccb6f4e72ab
+
+	column Métodos
+		isHidden
+		formatString: 0
+		lineageTag: f7f0e1e6-1b0a-4bfd-b766-aa2d73b6dd06
+		summarizeBy: sum
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = e1b8a1b8261246518b921f2e3f8ca359
+

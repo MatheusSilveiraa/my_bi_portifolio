@@ -1,0 +1,86 @@
+expression Parâmetro1 = #"Arquivo de Amostra" meta [IsParameterQuery=true, BinaryIdentifier=#"Arquivo de Amostra", Type="Binary", IsParameterQueryRequired=true]
+	lineageTag: 0792d381-6b3d-4512-83d8-22e4299b4a88
+	queryGroup: 'Transformar Arquivo de Inpatient\Consultas Auxiliares'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transformar o Arquivo de Exemplo' =
+		let
+		    Fonte = Csv.Document(Parâmetro1,[Delimiter=",", Columns=8, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+		    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true])
+		in
+		    #"Cabeçalhos Promovidos"
+	lineageTag: 32e9c7dd-2a40-4715-946a-6fecb4586fde
+	queryGroup: 'Transformar Arquivo de Inpatient'
+
+	annotation PBI_ResultType = Table
+
+expression 'Arquivo de Amostra' =
+		let
+		    Fonte = Folder.Files("C:\Users\matsi\EDA Projects\Data-Mapping-Bg\Data\Inpatient"),
+		    Navegação1 = Fonte{0}[Content]
+		in
+		    Navegação1
+	lineageTag: 2d52f7c4-e3a5-40ac-9154-1d24613250f5
+	queryGroup: 'Transformar Arquivo de Inpatient\Consultas Auxiliares'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transformar Arquivo' =
+		let
+		    Fonte = (Parâmetro1) => let
+		        Fonte = Csv.Document(Parâmetro1,[Delimiter=",", Columns=8, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+		        #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true])
+		    in
+		        #"Cabeçalhos Promovidos"
+		in
+		    Fonte
+	mAttributes: [ FunctionQueryBinding = "{""exemplarFormulaName"":""Transformar o Arquivo de Exemplo""}" ]
+	lineageTag: 32930cd2-4221-434a-b602-f08ec04eb0ea
+	queryGroup: 'Transformar Arquivo de Inpatient\Consultas Auxiliares'
+
+	annotation PBI_ResultType = Function
+
+expression Parâmetro2 = #"Arquivo de Amostra (2)" meta [IsParameterQuery=true, BinaryIdentifier=#"Arquivo de Amostra (2)", Type="Binary", IsParameterQueryRequired=true]
+	lineageTag: e0df2f49-8c24-4d03-b029-a6a61b1ecd92
+	queryGroup: 'Transformar Arquivo de Outpatient\Consultas Auxiliares'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transformar o Arquivo de Exemplo (2)' =
+		let
+		    Fonte = Csv.Document(Parâmetro2,[Delimiter=",", Columns=7, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+		    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true])
+		in
+		    #"Cabeçalhos Promovidos"
+	lineageTag: 49499f2f-ce99-421e-85dd-42baf826fb90
+	queryGroup: 'Transformar Arquivo de Outpatient'
+
+	annotation PBI_ResultType = Table
+
+expression 'Arquivo de Amostra (2)' =
+		let
+		    Fonte = Folder.Files("C:\Users\matsi\EDA Projects\Data-Mapping-Bg\Data\Outpatient"),
+		    Navegação1 = Fonte{0}[Content]
+		in
+		    Navegação1
+	lineageTag: a4f2fe22-7777-4a62-b458-5a4f7c7aa20c
+	queryGroup: 'Transformar Arquivo de Outpatient\Consultas Auxiliares'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transformar Arquivo (2)' =
+		let
+		    Fonte = (Parâmetro2) => let
+		        Fonte = Csv.Document(Parâmetro2,[Delimiter=",", Columns=7, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+		        #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true])
+		    in
+		        #"Cabeçalhos Promovidos"
+		in
+		    Fonte
+	mAttributes: [ FunctionQueryBinding = "{""exemplarFormulaName"":""Transformar o Arquivo de Exemplo (2)""}" ]
+	lineageTag: 207f1067-6352-4b9f-9309-86be0beb65f6
+	queryGroup: 'Transformar Arquivo de Outpatient\Consultas Auxiliares'
+
+	annotation PBI_ResultType = Function
+

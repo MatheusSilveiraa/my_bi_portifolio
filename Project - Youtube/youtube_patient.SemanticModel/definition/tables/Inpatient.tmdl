@@ -1,0 +1,131 @@
+table Inpatient
+	isHidden
+	lineageTag: 8964a97d-9e43-4dca-b443-a7018e5ed445
+
+	column 'Nome da Origem'
+		dataType: string
+		isHidden
+		lineageTag: 5a980775-39a3-4c4b-8a26-74bde8c66e5e
+		summarizeBy: none
+		sourceColumn: Nome da Origem
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Archive_Date
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: aa5c4199-dd6d-475d-af71-454e9f933d66
+		summarizeBy: none
+		sourceColumn: Archive_Date
+
+		variation Variation
+			isDefault
+			relationship: 1718b152-68e9-4523-81c8-7cf7094e0286
+			defaultHierarchy: LocalDateTable_d6c51a2e-1f7b-44e9-affc-1c2267798cd9.'Hierarquia de datas'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Specialty_HIPE
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 04d32b08-25d0-4bb1-b16b-c744b706940d
+		summarizeBy: sum
+		sourceColumn: Specialty_HIPE
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Specialty_Name
+		dataType: string
+		isHidden
+		lineageTag: a1f9a3d6-2bc7-4963-b9d0-49bc74ec09ef
+		summarizeBy: none
+		sourceColumn: Specialty_Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Case_Type
+		dataType: string
+		isHidden
+		lineageTag: 076856a7-495d-466b-9ec8-835498a60f70
+		summarizeBy: none
+		sourceColumn: Case_Type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Adult_Child
+		dataType: string
+		isHidden
+		lineageTag: 908c8ece-86af-4ff5-8c11-2c6bb81a0fc7
+		summarizeBy: none
+		sourceColumn: Adult_Child
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Age_Profile
+		dataType: string
+		isHidden
+		lineageTag: b440cf78-a7e5-412d-bb24-bb2d63a6c67d
+		summarizeBy: none
+		sourceColumn: Age_Profile
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Time_Bands
+		dataType: string
+		isHidden
+		lineageTag: 4f6de6cc-afdf-4644-999d-18a4cb5fae68
+		summarizeBy: none
+		sourceColumn: Time_Bands
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Total
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fe24b653-606c-4eb2-b84b-72eefafd64a6
+		summarizeBy: sum
+		sourceColumn: Total
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Inpatient = m
+		mode: import
+		source =
+				let
+				    Fonte = Folder.Files("C:\Users\matsi\EDA Projects\Data-Mapping-Bg\Data\Inpatient"),
+				    #"Arquivos Ocultos Filtrados1" = Table.SelectRows(Fonte, each [Attributes]?[Hidden]? <> true),
+				    #"Invocar Função Personalizada1" = Table.AddColumn(#"Arquivos Ocultos Filtrados1", "Transformar Arquivo", each #"Transformar Arquivo"([Content])),
+				    #"Colunas Renomeadas1" = Table.RenameColumns(#"Invocar Função Personalizada1", {"Name", "Nome da Origem"}),
+				    #"Outras Colunas Removidas1" = Table.SelectColumns(#"Colunas Renomeadas1", {"Nome da Origem", "Transformar Arquivo"}),
+				    #"Coluna de Tabela Expandida1" = Table.ExpandTableColumn(#"Outras Colunas Removidas1", "Transformar Arquivo", Table.ColumnNames(#"Transformar Arquivo"(#"Arquivo de Amostra"))),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Coluna de Tabela Expandida1",{{"Nome da Origem", type text}, {"Archive_Date", type date}, {"Specialty_HIPE", Int64.Type}, {"Specialty_Name", type text}, {"Case_Type", type text}, {"Adult_Child", type text}, {"Age_Profile", type text}, {"Time_Bands", type text}, {"Total", Int64.Type}})
+				in
+				    #"Tipo Alterado"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,39 @@
+table 'Calculation Method'
+	lineageTag: 8df8dd36-aaa2-4dd2-ae2c-61f427cb4565
+
+	measure 'Avg/Med Wait List' = SWITCH(VALUES('Calculation Method'[Calc Method]),"Average",[Average Wait List], "Median",[Median Wait List])
+		lineageTag: b4fb2159-626b-4e56-b90b-6353d2f3bf1b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Median Wait List' = MEDIAN(All_Data[Total])
+		lineageTag: a9bc773e-27d2-4e28-8088-b3fe98fb5095
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Wait List' = AVERAGE(All_Data[Total])
+		lineageTag: 3bd63451-60a4-4ede-b270-148ac1e67c15
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Calc Method'
+		dataType: string
+		lineageTag: 7b31fd66-025d-4d60-abfa-668c6bd78255
+		summarizeBy: none
+		sourceColumn: Calc Method
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Calculation Method' = m
+		mode: import
+		source =
+				let
+				    Fonte = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WcixLLUpMT1WK1YlW8k1NyUzMU4qNBQA=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Calc Method" = _t]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(Fonte,{{"Calc Method", type text}})
+				in
+				    #"Tipo Alterado"
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

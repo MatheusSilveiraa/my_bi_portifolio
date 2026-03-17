@@ -1,0 +1,136 @@
+table Outpatient
+	isHidden
+	lineageTag: 7778eb39-ff5b-465c-a90c-8e5f56351889
+
+	column 'Nome da Origem'
+		dataType: string
+		isHidden
+		lineageTag: acf5b08e-3a38-479f-a6f7-1953e76d158c
+		summarizeBy: none
+		sourceColumn: Nome da Origem
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Archive_Date
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 889a2fff-76fd-48eb-8872-dbb6f3d1049a
+		summarizeBy: none
+		sourceColumn: Archive_Date
+
+		variation Variation
+			isDefault
+			relationship: 7e30fe23-6e67-4108-aa6d-f4344c4e7a7f
+			defaultHierarchy: LocalDateTable_204910bf-5d1e-4ff9-8a5d-9ff6857b0993.'Hierarquia de datas'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Specialty_HIPE
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3114bf23-6dd8-456e-b0f1-e8838bc29497
+		summarizeBy: sum
+		sourceColumn: Specialty_HIPE
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Speciality_Name
+		dataType: string
+		isHidden
+		lineageTag: 3603f7d7-5e20-4b00-a1be-52b559d4fe35
+		summarizeBy: none
+		sourceColumn: Speciality_Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Adult_Child
+		dataType: string
+		isHidden
+		lineageTag: 14b45283-aab4-4ca8-8b84-874357be99e9
+		summarizeBy: none
+		sourceColumn: Adult_Child
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Age_Profile
+		dataType: string
+		isHidden
+		lineageTag: 106f3725-6c87-45a4-9200-f3d305dfcd09
+		summarizeBy: none
+		sourceColumn: Age_Profile
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Time_Bands
+		dataType: string
+		isHidden
+		lineageTag: e5d0fc99-5186-4932-9cf3-06aa5193d471
+		summarizeBy: none
+		sourceColumn: Time_Bands
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Total
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 575190a8-ff31-444e-a18f-549fa88a81a5
+		summarizeBy: sum
+		sourceColumn: Total
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Case_Type
+		dataType: string
+		isHidden
+		lineageTag: 5fc23882-ebe7-43df-90f7-e3d38a1930f3
+		summarizeBy: none
+		sourceColumn: Case_Type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Outpatient = m
+		mode: import
+		source =
+				let
+				    Fonte = Folder.Files("C:\Users\matsi\EDA Projects\Data-Mapping-Bg\Data\Outpatient"),
+				    #"Arquivos Ocultos Filtrados1" = Table.SelectRows(Fonte, each [Attributes]?[Hidden]? <> true),
+				    #"Invocar Função Personalizada1" = Table.AddColumn(#"Arquivos Ocultos Filtrados1", "Transformar Arquivo (2)", each #"Transformar Arquivo (2)"([Content])),
+				    #"Colunas Renomeadas1" = Table.RenameColumns(#"Invocar Função Personalizada1", {"Name", "Nome da Origem"}),
+				    #"Outras Colunas Removidas1" = Table.SelectColumns(#"Colunas Renomeadas1", {"Nome da Origem", "Transformar Arquivo (2)"}),
+				    #"Coluna de Tabela Expandida1" = Table.ExpandTableColumn(#"Outras Colunas Removidas1", "Transformar Arquivo (2)", Table.ColumnNames(#"Transformar Arquivo (2)"(#"Arquivo de Amostra (2)"))),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Coluna de Tabela Expandida1",{{"Nome da Origem", type text}, {"Archive_Date", type date}, {"Specialty_HIPE", Int64.Type}, {"Speciality", type text}, {"Adult_Child", type text}, {"Age_Profile", type text}, {"Time_Bands", type text}, {"Total", Int64.Type}}),
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"Tipo Alterado",{{"Speciality", "Speciality_Name"}}),
+				    #"Personalização Adicionada" = Table.AddColumn(#"Colunas Renomeadas", "Case_Type", each "Outpatient"),
+				    #"Colunas Reordenadas" = Table.ReorderColumns(#"Personalização Adicionada",{"Nome da Origem", "Archive_Date", "Specialty_HIPE", "Speciality_Name", "Case_Type", "Adult_Child", "Age_Profile", "Time_Bands", "Total"})
+				in
+				    #"Colunas Reordenadas"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navegação
+

@@ -1,0 +1,43 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup 'Transformar Arquivo de Inpatient'
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup 'Transformar Arquivo de Inpatient\Consultas Auxiliares'
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup 'Transformar Arquivo de Outpatient'
+
+	annotation PBI_QueryGroupOrder = 2
+
+queryGroup 'Transformar Arquivo de Outpatient\Consultas Auxiliares'
+
+	annotation PBI_QueryGroupOrder = 0
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Inpatient","Arquivo de Amostra","Parâmetro1","Transformar o Arquivo de Exemplo","Transformar Arquivo","Outpatient","Arquivo de Amostra (2)","Parâmetro2","Transformar o Arquivo de Exemplo (2)","Transformar Arquivo (2)","All_Data","Mapping_Specialty","Calculation Method"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Inpatient
+ref table DateTableTemplate_4923727e-af02-4bae-92b1-ac4a155e0f97
+ref table LocalDateTable_d6c51a2e-1f7b-44e9-affc-1c2267798cd9
+ref table Outpatient
+ref table LocalDateTable_204910bf-5d1e-4ff9-8a5d-9ff6857b0993
+ref table All_Data
+ref table LocalDateTable_d0b27af8-1acc-41b9-b9e4-db814896eac7
+ref table Mapping_Specialty
+ref table Medidas
+ref table 'Calculation Method'
+
+ref cultureInfo pt-BR
+
